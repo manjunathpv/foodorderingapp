@@ -3,6 +3,7 @@ package com.upgrad.FoodOrderingApp.api.controller;
 import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
@@ -46,11 +47,11 @@ public class CustomerController {
 
         final CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setUuid(UUID.randomUUID().toString());
-        customerEntity.setFirstName(signupCustomerRequest.getFirstName());
-        customerEntity.setLastName(signupCustomerRequest.getLastName());
+        customerEntity.setFirstname(signupCustomerRequest.getFirstName());
+        customerEntity.setLastname(signupCustomerRequest.getLastName());
         customerEntity.setEmail(signupCustomerRequest.getEmailAddress());
         customerEntity.setContactNumber(signupCustomerRequest.getContactNumber());
-        customerEntity.setPassoword(signupCustomerRequest.getPassword());
+        customerEntity.setPassword(signupCustomerRequest.getPassword());
 
         final CustomerEntity createdCustomerEntity = customerService.saveCustomer(customerEntity);
         SignupCustomerResponse customerResponse = new SignupCustomerResponse()
@@ -86,8 +87,8 @@ public class CustomerController {
                         .getUuid()).message("LOGGED IN SUCCESSFULLY");
 
         loginResponse.setId(createdCustomerAuthEntity.getCustomer().getUuid());
-        loginResponse.setFirstName(createdCustomerAuthEntity.getCustomer().getFirstName());
-        loginResponse.setLastName(createdCustomerAuthEntity.getCustomer().getLastName());
+        loginResponse.setFirstName(createdCustomerAuthEntity.getCustomer().getFirstname());
+        loginResponse.setLastName(createdCustomerAuthEntity.getCustomer().getLastname());
         loginResponse.setContactNumber(createdCustomerAuthEntity.getCustomer().getContactNumber());
         loginResponse.setEmailAddress(createdCustomerAuthEntity.getCustomer().getEmail());
 
@@ -131,16 +132,16 @@ public class CustomerController {
         String accessToken = authorization.split("Bearer ")[1];
         CustomerEntity customerEntity = customerService.getCustomer(accessToken);
 
-        customerEntity.setFirstName(updateCustomerRequest.getFirstName());
+        customerEntity.setFirstname(updateCustomerRequest.getFirstName());
         if (!updateCustomerRequest.getLastName().equals("")) {
-            customerEntity.setLastName(updateCustomerRequest.getLastName());
+            customerEntity.setLastname(updateCustomerRequest.getLastName());
         }
 
         CustomerEntity updatedCustomerEntity = customerService.updateCustomer(customerEntity);
         UpdateCustomerResponse customerResponse = new UpdateCustomerResponse()
                 .id(updatedCustomerEntity.getUuid()).status("CUSTOMER DETAILS UPDATED SUCCESSFULLY");
-        customerResponse.setFirstName(updatedCustomerEntity.getFirstName());
-        customerResponse.setLastName(updatedCustomerEntity.getLastName());
+        customerResponse.setFirstName(updatedCustomerEntity.getFirstname());
+        customerResponse.setLastName(updatedCustomerEntity.getLastname());
         return new ResponseEntity<UpdateCustomerResponse>(customerResponse, HttpStatus.OK);
     }
 

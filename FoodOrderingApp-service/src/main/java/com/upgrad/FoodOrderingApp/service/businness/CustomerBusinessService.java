@@ -15,6 +15,6 @@ public class CustomerBusinessService {
 
   @Transactional(propagation = Propagation.REQUIRED)
   public CustomerEntity getCustomerByUuid(String customerUuid) {
-    return customerDao.getCustomerById(customerUuid);
+    return customerDao.getCustomerByUUID(customerUuid);
   }
 }
