@@ -3,53 +3,81 @@ package com.upgrad.FoodOrderingApp.service.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "address")
-@NamedQueries({
-        @NamedQuery(name = "addressByAddressId", query = "select ae from AddressEntity ae where ae.uuid =:addressId")
+@NamedQueries(
+        {
+                @NamedQuery(name = "getAllAddresses", query = "select q from AddressEntity q"),
+        }
+)
 
-})
-public class AddressEntity implements Serializable {
+//This class contains all the attributes that are to be mapped to the respective fields in 'address' table
+public class AddressEntity {
 
   @Id
-  @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "UUID")
+  @Column(name = "uuid")
+  @NotNull
   @Size(max = 200)
   private String uuid;
 
-  @Column(name = "FLAT_BUIL_NUMBER")
+  @Column(name = "flat_buil_number")
+  @NotNull
   @Size(max = 255)
-  private String flatBuilNumber;
+  private String flatBuilNo;
 
   @Column(name = "locality")
+  @NotNull
   @Size(max = 255)
   private String locality;
 
   @Column(name = "city")
+  @NotNull
   @Size(max = 30)
   private String city;
 
   @Column(name = "pincode")
+  @NotNull
   @Size(max = 30)
   private String pincode;
 
-  @OneToOne
-  @JoinColumn(name="STATE_ID")
-  private StateEntity stateEntity;
+  @ManyToOne
+  @JoinColumn(name = "state_id")
+  @NotNull
+  private StateEntity state;
 
-  @Column(name="ACTIVE")
+  @Column(name = "active")
   @NotNull
   private Integer active;
 
-  @OneToOne(mappedBy = "addressEntity")
-  private RestaurantEntity restaurantEntity;
+  @ManyToOne
+  @JoinTable(name = "customer_address", joinColumns = @JoinColumn(name = "address_id"),
+          inverseJoinColumns = @JoinColumn(name = "customer_id"))
+  private CustomerEntity customer;
+
+  public AddressEntity() {}
+
+  public AddressEntity(String uuid, String flatNo, String locality, String city, String pincode, StateEntity stateEntity) {
+    this.uuid = uuid;
+    this.flatBuilNo = flatNo;
+    this.locality = locality;
+    this.city = city;
+    this.pincode = pincode;
+    this.state = stateEntity;
+    this.active = 1;
+  }
+
+  public CustomerEntity getCustomer() {
+    return customer;
+  }
+
+  public void setCustomer(CustomerEntity customerEntity) {
+    this.customer = customerEntity;
+  }
 
   public Integer getId() {
     return id;
@@ -67,12 +95,12 @@ public class AddressEntity implements Serializable {
     this.uuid = uuid;
   }
 
-  public String getFlatBuilNumber() {
-    return flatBuilNumber;
+  public String getFlatBuilNo() {
+    return flatBuilNo;
   }
 
-  public void setFlatBuilNumber(String flatBuilNumber) {
-    this.flatBuilNumber = flatBuilNumber;
+  public void setFlatBuilNo(String flatNumber) {
+    this.flatBuilNo = flatNumber;
   }
 
   public String getLocality() {
@@ -99,12 +127,12 @@ public class AddressEntity implements Serializable {
     this.pincode = pincode;
   }
 
-  public StateEntity getStateEntity() {
-    return stateEntity;
+  public StateEntity getState() {
+    return state;
   }
 
-  public void setStateEntity(StateEntity stateEntity) {
-    this.stateEntity = stateEntity;
+  public void setState(StateEntity state) {
+    this.state = state;
   }
 
   public Integer getActive() {
@@ -113,50 +141,6 @@ public class AddressEntity implements Serializable {
 
   public void setActive(Integer active) {
     this.active = active;
-  }
-
-  public RestaurantEntity getRestaurantEntity() {
-    return restaurantEntity;
-  }
-
-  public void setRestaurantEntity(RestaurantEntity restaurantEntity) {
-    this.restaurantEntity = restaurantEntity;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    AddressEntity that = (AddressEntity) o;
-    return Objects.equals(id, that.id) &&
-            Objects.equals(uuid, that.uuid) &&
-            Objects.equals(flatBuilNumber, that.flatBuilNumber) &&
-            Objects.equals(locality, that.locality) &&
-            Objects.equals(city, that.city) &&
-            Objects.equals(pincode, that.pincode) &&
-            Objects.equals(stateEntity, that.stateEntity) &&
-            Objects.equals(active, that.active) &&
-            Objects.equals(restaurantEntity, that.restaurantEntity);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, uuid, flatBuilNumber, locality, city, pincode, stateEntity, active, restaurantEntity);
-  }
-
-  @Override
-  public String toString() {
-    return "AddressEntity{" +
-            "id=" + id +
-            ", uuid=" + uuid +
-            ", flatBuilNumber='" + flatBuilNumber + '\'' +
-            ", locality='" + locality + '\'' +
-            ", city='" + city + '\'' +
-            ", pincode='" + pincode + '\'' +
-            ", stateEntity=" + stateEntity +
-            ", active=" + active +
-            ", restaurantEntity=" + restaurantEntity +
-            '}';
   }
 
 }

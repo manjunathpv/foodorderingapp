@@ -54,7 +54,7 @@ public class OrdersBusinessService {
     customerEntity.setPassword("95070049B59AFCD5A10135A810B10BBA9FC010028AA64C6574DDE85F6DC6009DE");
     customerEntity.setSalt("asdfrtgyhdfrrfbfg5ef45r34f4ttt");
 
-    customerDao.saveCustomer(customerEntity);
+    customerDao.createCustomer(customerEntity);
 
 //    =======END=======
 
@@ -95,7 +95,7 @@ public class OrdersBusinessService {
   public List<OrdersEntity> getAllPastOrders(String authorization) {
 
 //    Not Needed as such becuase we have UUID for Customer we can directly query Orders Table
-    CustomerEntity customerEntity = customerDao.getCustomerById("7d174a25-ba31-45a8-85b4-b06ffc9d5f8f");
+    CustomerEntity customerEntity = customerDao.getCustomerByUUID("7d174a25-ba31-45a8-85b4-b06ffc9d5f8f");
 
     List<OrdersEntity> ordersEntity = ordersDao.getOrdersByCustomerUuid(1);
 
