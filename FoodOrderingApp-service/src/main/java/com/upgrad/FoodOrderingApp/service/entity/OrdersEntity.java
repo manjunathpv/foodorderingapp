@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "orders")
 @NamedQueries({
-        @NamedQuery(name = "orderByCustUuid", query = "select oe from OrdersEntity oe where oe.id =:uuid")
+        @NamedQuery(name = "orderByCustUuid", query = "select oe from OrdersEntity oe where oe.customerEntity =:cust")
 })
 public class OrdersEntity implements Serializable {
 
@@ -50,17 +50,15 @@ public class OrdersEntity implements Serializable {
   @NotNull
   private CustomerEntity customerEntity;
 
-  @ManyToOne
+  @ManyToOne(cascade=CascadeType.ALL)
   @JoinColumn(name = "ADDRESS_ID")
-  @NotNull
   private AddressEntity addressEntity;
 
   @ManyToOne
   @JoinColumn(name = "RESTAURANT_ID")
-  @NotNull
   private RestaurantEntity restaurantEntity;
 
-  @OneToOne(mappedBy = "ordersEntity")
+  @OneToOne(mappedBy = "ordersEntity",cascade = CascadeType.ALL, orphanRemoval = true)
   private OrderItemEntity orderItemEntity;
 
   public Integer getId() {
