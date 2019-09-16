@@ -115,11 +115,11 @@ public class OrderController {
       String addressUuid = order.getAddressEntity().getUuid();
       AddressEntity addressEntity = addressBusinessService.getAddressByUuid(addressUuid);
       OrderListAddressState orderListAddressState = new OrderListAddressState()
-              .id(UUID.fromString(addressEntity.getStateEntity().getUuid()))
-              .stateName(addressEntity.getStateEntity().getStateName());
+              .id(UUID.fromString(addressEntity.getState().getUuid()))
+              .stateName(addressEntity.getState().getStateName());
       OrderListAddress orderListAddress = new OrderListAddress()
               .id(UUID.fromString(addressEntity.getUuid()))
-              .flatBuildingName(addressEntity.getFlatBuilNumber())
+              .flatBuildingName(addressEntity.getFlatBuilNo())
               .locality(addressEntity.getLocality())
               .city(addressEntity.getCity())
               .pincode(addressEntity.getPincode())
