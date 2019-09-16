@@ -12,7 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "orders")
 @NamedQueries({
-        @NamedQuery(name = "orderByCustUuid", query = "select oe from OrdersEntity oe where oe.customerEntity =:cust")
+        @NamedQuery(name = "orderByCustUuid", query = "select oe from OrderEntity oe where oe.customerEntity =:cust")
 })
 public class OrderEntity implements Serializable {
 
@@ -58,9 +58,6 @@ public class OrderEntity implements Serializable {
   @ManyToOne
   @JoinColumn(name = "RESTAURANT_ID")
   private RestaurantEntity restaurantEntity;
-
-  @OneToOne(mappedBy = "ordersEntity",cascade = CascadeType.ALL, orphanRemoval = true)
-  private OrderItemEntity orderItemEntity;
 
   public OrderEntity(){}
 
@@ -155,13 +152,5 @@ public class OrderEntity implements Serializable {
 
   public void setRestaurantEntity(RestaurantEntity restaurantEntity) {
     this.restaurantEntity = restaurantEntity;
-  }
-
-  public OrderItemEntity getOrderItemEntity() {
-    return orderItemEntity;
-  }
-
-  public void setOrderItemEntity(OrderItemEntity orderItemEntity) {
-    this.orderItemEntity = orderItemEntity;
   }
 }

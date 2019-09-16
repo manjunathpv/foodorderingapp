@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-        @NamedQuery(name = "itemsByOrder", query = "select q from OrderItemEntity q where q.ordersEntity = :orderEntity"),
+        @NamedQuery(name = "itemsByOrder", query = "select q from OrderItemEntity q where q.orderEntity = :orderEntity"),
 })
 public class OrderItemEntity implements Serializable {
 
@@ -19,9 +19,10 @@ public class OrderItemEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name="ORDER_ID")
-  private OrderEntity ordersEntity;
+  @NotNull
+  private OrderEntity orderEntity;
 
   @ManyToOne
   @JoinColumn(name = "ITEM_ID")
@@ -45,11 +46,11 @@ public class OrderItemEntity implements Serializable {
   }
 
   public OrderEntity getOrdersEntity() {
-    return ordersEntity;
+    return orderEntity;
   }
 
   public void setOrdersEntity(OrderEntity ordersEntity) {
-    this.ordersEntity = ordersEntity;
+    this.orderEntity = ordersEntity;
   }
 
   public ItemEntity getItemEntity() {

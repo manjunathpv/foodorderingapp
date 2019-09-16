@@ -67,22 +67,17 @@ public class OrderService {
       throw new PaymentMethodNotFoundException("PNF-002","No payment method found by this id");
     orderEntity.setPaymentEntity(paymentEntity);
 
-    RestaurantEntity restaurantEntity = restaurantDao.getRestaurantById(restaurantId);
+    RestaurantEntity restaurantEntity = restaurantDao.getRestaurantByUUID(restaurantId);
     if(restaurantEntity == null)
       throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
     orderEntity.setRestaurantEntity(restaurantEntity);
 
 
 
-    ItemEntity itemEntity1 = itemService.getItemByUuid(itemEntity.getUuid());
-    if(itemEntity1 == null)
-      throw new ItemNotFoundException("INF-003", "No item by this id exist");
+    ItemEntity itemEntity1 = itemService.getItemByUUID(itemEntity.getUuid());
     orderItemEntity.setItemEntity(itemEntity1);
 
     orderItemEntity.setOrdersEntity(orderEntity);
-    orderEntity.setOrderItemEntity(orderItemEntity);
-
-
 
     OrderEntity ordersEntity1 = ordersDao.saveOrder(orderEntity);
 
@@ -104,7 +99,7 @@ public class OrderService {
 
   @Transactional(propagation = Propagation.REQUIRED)
   public List<OrderItemEntity> getOrderItemFromOrder(OrderEntity order) {
-    List<OrderItemEntity> orderItemEntities = orderItemDao.getOrderItemByOrder(order);
+    List<OrderItemEntity> orderItemEntities = orderItemDao.getItemsByOrder(order);
     return orderItemEntities;
   }
 

@@ -34,9 +34,6 @@ public class ItemEntity implements Serializable {
   @Size(max = 10)
   private String type;
 
-  @OneToOne(mappedBy = "itemEntity")
-  private OrderItemEntity orderItemEntity;
-
   public Integer getId() {
     return id;
   }
