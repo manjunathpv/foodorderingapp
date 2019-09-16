@@ -1,7 +1,9 @@
 package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.CategoryDao;
+import com.upgrad.FoodOrderingApp.service.dao.RestaurantDao;
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
+import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,7 @@ public class CategoryService {
 
     /* Method to get the list of categories of restaurant based on restaurants UUID */
     public List<CategoryEntity> getCategoriesByRestaurant(String restaurantUUID) {
-        RestaurantEntity restaurantEntity = restaurantDao.getRestaurantByUUID(restaurantUUID);
+        RestaurantEntity restaurantEntity = restaurantDao.getRestaurantById(restaurantUUID);
         return restaurantEntity.getCategories().stream()
                 .sorted(Comparator.comparing(CategoryEntity::getCategoryName))
                 .collect(Collectors.toList());
