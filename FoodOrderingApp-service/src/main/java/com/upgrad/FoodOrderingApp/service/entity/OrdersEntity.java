@@ -10,6 +10,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
+@NamedQueries({
+        @NamedQuery(name = "orderByCustUuid", query = "select oe from OrdersEntity oe where oe.id =:uuid")
+})
 public class OrdersEntity implements Serializable {
 
   @Id
@@ -33,9 +36,8 @@ public class OrdersEntity implements Serializable {
   @NotNull
   private BigDecimal discount;
 
-  @Column(name = "DATE")
+  @Column
   @NotNull
-  @Size(max = 6)
   private LocalDateTime date;
 
   @ManyToOne
