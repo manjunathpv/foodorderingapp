@@ -3,12 +3,12 @@ package com.upgrad.FoodOrderingApp.service.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "payment")
 @NamedQueries({
-        @NamedQuery(name = "paymentByPaymentId", query = "select pe from PaymentEntity pe where pe.uuid =:paymentId")
+        @NamedQuery(name = "paymentByPaymentId", query = "select pe from PaymentEntity pe where pe.uuid =:paymentId"),
+        @NamedQuery(name = "allPayments", query = "select pe from PaymentEntity pe")
 })
 public class PaymentEntity implements Serializable {
 

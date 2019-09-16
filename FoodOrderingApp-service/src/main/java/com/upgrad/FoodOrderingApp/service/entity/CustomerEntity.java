@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -57,6 +59,19 @@ public class CustomerEntity implements Serializable {
   @Size(max = 255)
   //@ToStringExclude
   private String salt;
+
+  @OneToMany
+  @JoinTable(name = "customer_address", joinColumns = @JoinColumn(name = "customer_id"),
+          inverseJoinColumns = @JoinColumn(name = "address_id"))
+  private List<AddressEntity> addresses = new ArrayList<>();
+
+  public List<AddressEntity> getAddresses() {
+    return addresses;
+  }
+
+  public void setAddresses(List<AddressEntity> addresses) {
+    this.addresses = addresses;
+  }
 
 
   public Integer getId() {

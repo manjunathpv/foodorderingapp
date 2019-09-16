@@ -48,7 +48,7 @@ public class OrdersBusinessService {
           CouponNotFoundException, AddressNotFoundException, PaymentMethodNotFoundException, RestaurantNotFoundException, ItemNotFoundException {
 
     String accessToken = authorization.split("Bearer ")[1];
-    CustomerEntity customerEntity = customerService.getCustomerAuth(accessToken);
+    CustomerEntity customerEntity = customerService.getCustomer(accessToken);
 
     ordersEntity.setCustomerEntity(customerEntity);
 
@@ -94,7 +94,7 @@ public class OrdersBusinessService {
   public List<OrdersEntity> getAllPastOrders(String authorization) throws AuthorizationFailedException {
 
     String accessToken = authorization.split("Bearer ")[1];
-    CustomerEntity customerEntity = customerService.getCustomerAuth(accessToken);
+    CustomerEntity customerEntity = customerService.getCustomer(accessToken);
     List<OrdersEntity> ordersEntity = ordersDao.getOrdersByCustomerUuid(customerEntity);
 
     return ordersEntity;
