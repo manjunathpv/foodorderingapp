@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @Table(name = "coupon")
@@ -32,6 +31,15 @@ public class CouponEntity implements Serializable {
   @Column(name = "PERCENT")
   @NotNull
   private Integer percent;
+
+  public CouponEntity(){}
+
+  public CouponEntity(@Size(max = 200) String uuid, @NotNull @Size(max = 500) String couponName, @NotNull Integer percent) {
+    super();
+    this.uuid = uuid;
+    this.couponName = couponName;
+    this.percent = percent;
+  }
 
   public Integer getId() {
     return id;

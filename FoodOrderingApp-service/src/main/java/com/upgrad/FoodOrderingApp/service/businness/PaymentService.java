@@ -10,13 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class PaymentBusinessService {
+public class PaymentService {
 
   @Autowired
   private PaymentDao paymentDao;
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public PaymentEntity getPaymentByUuid(String paymentUuid){
+  public PaymentEntity getPaymentByUUID(String paymentUuid){
     return paymentDao.getPaymentById(paymentUuid);
   }
 

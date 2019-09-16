@@ -20,7 +20,7 @@ public class OrderItemEntity implements Serializable {
 
   @OneToOne
   @JoinColumn(name="ORDER_ID")
-  private OrdersEntity ordersEntity;
+  private OrderEntity ordersEntity;
 
   @OneToOne
   @JoinColumn(name = "ITEM_ID")
@@ -42,11 +42,11 @@ public class OrderItemEntity implements Serializable {
     this.id = id;
   }
 
-  public OrdersEntity getOrdersEntity() {
+  public OrderEntity getOrdersEntity() {
     return ordersEntity;
   }
 
-  public void setOrdersEntity(OrdersEntity ordersEntity) {
+  public void setOrdersEntity(OrderEntity ordersEntity) {
     this.ordersEntity = ordersEntity;
   }
 

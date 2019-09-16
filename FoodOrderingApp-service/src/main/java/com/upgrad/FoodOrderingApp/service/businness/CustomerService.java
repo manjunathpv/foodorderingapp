@@ -158,27 +158,4 @@ public class CustomerService {
 
         return customerDao.updateCustomerEntity(customerEntity);
     }
-
-    /* Method to signout customer based on access-token else would return exception that user is not authorized without access=-token*/
-    @Transactional(propagation = Propagation.REQUIRED)
-    public CustomerEntity getCustomerAuth(String accessToken) throws AuthorizationFailedException {
-
-        CustomerAuthEntity customerAuthEntity = customerDao.getCustomerAuthByAccessToken(accessToken);
-
-        if (customerAuthEntity == null) {
-            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
-        }
-
-        if (customerAuthEntity.getLogoutAt() != null) {
-            throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
-        }
-
-        ZonedDateTime now = ZonedDateTime.now();
-        if (customerAuthEntity.getExpiresAt().isBefore(now)) {
-            throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
-        }
-
-
-        return customerAuthEntity.getCustomer();
-    }
 }

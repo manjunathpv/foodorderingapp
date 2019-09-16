@@ -1,7 +1,7 @@
 package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,14 +15,14 @@ public class OrdersDao {
   @PersistenceContext
   private EntityManager entityManager;
 
-  public OrdersEntity saveOrder(OrdersEntity ordersEntity) {
+  public OrderEntity saveOrder(OrderEntity ordersEntity) {
     entityManager.persist(ordersEntity);
     return ordersEntity;
   }
 
-  public List<OrdersEntity> getOrdersByCustomerUuid(final CustomerEntity cust) {
+  public List<OrderEntity> getOrdersByCustomerUuid(final CustomerEntity cust) {
     try {
-      return entityManager.createNamedQuery("orderByCustUuid", OrdersEntity.class).setParameter("cust", cust).getResultList();
+      return entityManager.createNamedQuery("orderByCustUuid", OrderEntity.class).setParameter("cust", cust).getResultList();
     } catch (NoResultException nre) {
       return null;
     }
