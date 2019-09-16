@@ -1,61 +1,63 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
-import org.hibernate.criterion.Order;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/**
+ * OrderItemEntity class contains all the attributes to be mapped to all the fields in 'order_item' table in the database
+ */
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-        @NamedQuery(name = "orderItemByOrder", query = "select oie from OrderItemEntity oie where oie.ordersEntity =:order")
+        @NamedQuery(name = "itemsByOrder", query = "select q from OrderItemEntity q where q.order = :orderEntity"),
 })
 public class OrderItemEntity implements Serializable {
 
   @Id
-  @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Integer Id;
 
-  @OneToOne
-  @JoinColumn(name="ORDER_ID")
-  private OrdersEntity ordersEntity;
+  @ManyToOne
+  @JoinColumn(name = "order_id")
+  @NotNull
+  private OrdersEntity order;
 
-  @OneToOne
-  @JoinColumn(name = "ITEM_ID")
-  private ItemEntity itemEntity;
+  @ManyToOne
+  @JoinColumn(name = "item_id")
+  @NotNull
+  private ItemEntity item;
 
-  @Column(name = "QUANTITY")
+  @Column(name = "quantity")
   @NotNull
   private Integer quantity;
 
-  @Column(name = "PRICE")
+  @Column(name = "price")
   @NotNull
   private Integer price;
 
   public Integer getId() {
-    return id;
+    return Id;
   }
 
   public void setId(Integer id) {
-    this.id = id;
+    Id = id;
   }
 
-  public OrdersEntity getOrdersEntity() {
-    return ordersEntity;
+  public OrdersEntity getOrder() {
+    return order;
   }
 
-  public void setOrdersEntity(OrdersEntity ordersEntity) {
-    this.ordersEntity = ordersEntity;
+  public void setOrder(OrdersEntity order) {
+    this.order = order;
   }
 
-  public ItemEntity getItemEntity() {
-    return itemEntity;
+  public ItemEntity getItem() {
+    return item;
   }
 
-  public void setItemEntity(ItemEntity itemEntity) {
-    this.itemEntity = itemEntity;
+  public void setItem(ItemEntity item) {
+    this.item = item;
   }
 
   public Integer getQuantity() {
