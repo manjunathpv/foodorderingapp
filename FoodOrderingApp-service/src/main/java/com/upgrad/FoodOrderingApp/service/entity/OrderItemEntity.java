@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-        @NamedQuery(name = "orderItemByOrder", query = "select oie from OrderItemEntity oie where oie.order_id =:uuid")
+        @NamedQuery(name = "orderItemByOrder", query = "select oie from OrderItemEntity oie where oie.ordersEntity =:order")
 })
 public class OrderItemEntity implements Serializable {
 

@@ -125,8 +125,8 @@ public class OrderController {
               .pincode(addressEntity.getPincode())
               .state(orderListAddressState);
 
-      String orderUuid = order.getUuid();
-      List<OrderItemEntity> orderItemEntities = ordersBusinessService.getOrderItemFromOrder(orderUuid);
+//      String orderUuid = order.getUuid();
+      List<OrderItemEntity> orderItemEntities = ordersBusinessService.getOrderItemFromOrder(order);
       List<ItemQuantityResponse> itemQuantityResponseList = new ArrayList<>();
       for (OrderItemEntity orderItem: orderItemEntities) {
 
@@ -134,7 +134,7 @@ public class OrderController {
                 .id(UUID.fromString(orderItem.getItemEntity().getUuid()))
                 .itemName(orderItem.getItemEntity().getItemName())
                 .itemPrice(orderItem.getItemEntity().getPrice())
-                .type(ItemQuantityResponseItem.TypeEnum.valueOf(orderItem.getItemEntity().getType()));
+                .type(ItemQuantityResponseItem.TypeEnum.valueOf(orderItem.getItemEntity().getType().equals(0)?"VEG":"NON_VEG"));
 
 
         ItemQuantityResponse itemQuantityResponse = new ItemQuantityResponse().quantity(orderItem.getQuantity())
