@@ -10,54 +10,55 @@ import java.io.Serializable;
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-        @NamedQuery(name = "itemsByOrder", query = "select q from OrderItemEntity q where q.order = :orderEntity"),
+        @NamedQuery(name = "itemsByOrder", query = "select q from OrderItemEntity q where q.orderEntity = :orderEntity"),
 })
 public class OrderItemEntity implements Serializable {
 
   @Id
+  @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer Id;
+  private Integer id;
 
   @ManyToOne
-  @JoinColumn(name = "order_id")
+  @JoinColumn(name="ORDER_ID")
   @NotNull
-  private OrdersEntity order;
+  private OrderEntity orderEntity;
 
   @ManyToOne
-  @JoinColumn(name = "item_id")
+  @JoinColumn(name = "ITEM_ID")
   @NotNull
-  private ItemEntity item;
+  private ItemEntity itemEntity;
 
-  @Column(name = "quantity")
+  @Column(name = "QUANTITY")
   @NotNull
   private Integer quantity;
 
-  @Column(name = "price")
+  @Column(name = "PRICE")
   @NotNull
   private Integer price;
 
   public Integer getId() {
-    return Id;
+    return id;
   }
 
   public void setId(Integer id) {
-    Id = id;
+    this.id = id;
   }
 
-  public OrdersEntity getOrder() {
-    return order;
+  public OrderEntity getOrdersEntity() {
+    return orderEntity;
   }
 
-  public void setOrder(OrdersEntity order) {
-    this.order = order;
+  public void setOrdersEntity(OrderEntity ordersEntity) {
+    this.orderEntity = ordersEntity;
   }
 
-  public ItemEntity getItem() {
-    return item;
+  public ItemEntity getItemEntity() {
+    return itemEntity;
   }
 
-  public void setItem(ItemEntity item) {
-    this.item = item;
+  public void setItemEntity(ItemEntity itemEntity) {
+    this.itemEntity = itemEntity;
   }
 
   public Integer getQuantity() {

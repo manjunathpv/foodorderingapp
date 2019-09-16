@@ -51,7 +51,7 @@ public class RestaurantController {
         for (RestaurantEntity restaurantEntity : restaurantEntityList) {
             RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState()
                     .id(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()))
-                    .stateName(restaurantEntity.getAddress().getState().getStatename());
+                    .stateName(restaurantEntity.getAddress().getState().getStateName());
 
             RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress()
                     .id(UUID.fromString(restaurantEntity.getAddress().getUuid()))
@@ -107,7 +107,7 @@ public class RestaurantController {
         for (RestaurantEntity restaurantEntity : restaurantEntityList) {
             RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState()
                     .id(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()))
-                    .stateName(restaurantEntity.getAddress().getState().getStatename());
+                    .stateName(restaurantEntity.getAddress().getState().getStateName());
 
             RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress()
                     .id(UUID.fromString(restaurantEntity.getAddress().getUuid()))
@@ -158,7 +158,7 @@ public class RestaurantController {
         for (RestaurantEntity restaurantEntity : restaurantEntityList) {
             RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState()
                     .id(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()))
-                    .stateName(restaurantEntity.getAddress().getState().getStatename());
+                    .stateName(restaurantEntity.getAddress().getState().getStateName());
 
             RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress()
                     .id(UUID.fromString(restaurantEntity.getAddress().getUuid()))
@@ -206,7 +206,7 @@ public class RestaurantController {
 
         RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState()
                 .id(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()))
-                .stateName(restaurantEntity.getAddress().getState().getStatename());
+                .stateName(restaurantEntity.getAddress().getState().getStateName());
 
         RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress()
                 .id(UUID.fromString(restaurantEntity.getAddress().getUuid()))
@@ -235,7 +235,8 @@ public class RestaurantController {
                         .id(UUID.fromString(itemEntity.getUuid()))
                         .itemName(itemEntity.getItemName())
                         .price(itemEntity.getPrice())
-                        .itemType(ItemList.ItemTypeEnum.fromValue(itemEntity.getType().getValue()));
+                        .itemType(ItemList.ItemTypeEnum.valueOf(itemEntity.getType().equals(0)?"VEG":"NON_VEG"));
+
 
                 categoryList.addItemListItem(itemList);
             }

@@ -2,7 +2,7 @@ package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import org.springframework.stereotype.Repository;
 
@@ -20,33 +20,33 @@ public class OrderDao {
     private EntityManager entityManager;
 
     /* method to fetch orders based on address */
-    public List<OrdersEntity> getOrdersByAddress(AddressEntity addressEntity) {
+    public List<OrderEntity> getOrdersByAddress(AddressEntity addressEntity) {
         try {
-            return entityManager.createNamedQuery("ordersByAddress", OrdersEntity.class).setParameter("address", addressEntity).getResultList();
+            return entityManager.createNamedQuery("ordersByAddress", OrderEntity.class).setParameter("address", addressEntity).getResultList();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
     /* Method to create new order */
-    public OrdersEntity createOrder(OrdersEntity orderEntity) {
+    public OrderEntity createOrder(OrderEntity orderEntity) {
         entityManager.persist(orderEntity);
         return orderEntity;
     }
 
     /*Method to fetch orders based on the customer object*/
-    public List<OrdersEntity> getOrdersByCustomers(CustomerEntity customerEntity) {
+    public List<OrderEntity> getOrdersByCustomers(CustomerEntity customerEntity) {
         try {
-            return entityManager.createNamedQuery("ordersByCustomer", OrdersEntity.class).setParameter("customer", customerEntity).getResultList();
+            return entityManager.createNamedQuery("ordersByCustomer", OrderEntity.class).setParameter("customer", customerEntity).getResultList();
         } catch (NoResultException nre) {
             return null;
         }
     }
 
     /* Method to fetch Orders based on restaurant object */
-    public List<OrdersEntity> getOrdersByRestaurant(RestaurantEntity restaurantEntity) {
+    public List<OrderEntity> getOrdersByRestaurant(RestaurantEntity restaurantEntity) {
         try {
-            return entityManager.createNamedQuery("ordersByRestaurant", OrdersEntity.class).setParameter("restaurant", restaurantEntity).getResultList();
+            return entityManager.createNamedQuery("ordersByRestaurant", OrderEntity.class).setParameter("restaurant", restaurantEntity).getResultList();
         } catch (NoResultException nre) {
             return null;
         }

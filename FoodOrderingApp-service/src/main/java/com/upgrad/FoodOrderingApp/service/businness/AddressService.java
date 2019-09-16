@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AddressService {
@@ -99,12 +100,18 @@ public class AddressService {
     /* Deletes the address entity only if orders on that address from past are null or 0 else will set the address as inactive*/
     @Transactional(propagation = Propagation.REQUIRED)
     public AddressEntity deleteAddress(AddressEntity addressEntity) {
-        List<OrdersEntity> ordersEntityList = ordersDao.getOrdersByAddress(addressEntity);
+        List<OrderEntity> ordersEntityList = ordersDao.getOrdersByAddress(addressEntity);
         if (ordersEntityList == null || ordersEntityList.isEmpty()) {
             return addressDao.deleteAddressEntity(addressEntity);
         }
 
         addressEntity.setActive(0);
         return addressDao.updateAddressEntity(addressEntity);
+    }
+
+//    Get Address from Address UUID
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AddressEntity getAddressByUuid(String addressUuid) {
+        return addressDao.getAddressById(addressUuid);
     }
 }

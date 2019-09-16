@@ -51,7 +51,7 @@ public class ItemController {
                         .id(UUID.fromString(itemEntity.getUuid()))
                         .itemName(itemEntity.getItemName())
                         .price(itemEntity.getPrice())
-                        .itemType(ItemList.ItemTypeEnum.fromValue(itemEntity.getType().getValue()));
+                        .itemType(ItemList.ItemTypeEnum.valueOf(itemEntity.getType().equals(0)?"VEG":"NON_VEG"));
                 itemListResponse.add(itemList);
                 count += 1;
             } else {

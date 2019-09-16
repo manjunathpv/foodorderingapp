@@ -66,6 +66,8 @@ public class RestaurantEntity {
           inverseJoinColumns = @JoinColumn(name = "item_id"))
   private List<ItemEntity> items = new ArrayList<>();
 
+  public RestaurantEntity(){}
+
   public List<ItemEntity> getItems() {
     return items;
   }
