@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "address")
@@ -40,7 +39,7 @@ public class AddressEntity implements Serializable {
   @Size(max = 30)
   private String pincode;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name="STATE_ID")
   private StateEntity stateEntity;
 
@@ -48,7 +47,7 @@ public class AddressEntity implements Serializable {
   @NotNull
   private Integer active;
 
-  @OneToOne(mappedBy = "addressEntity")
+  @OneToOne(mappedBy = "addressEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private RestaurantEntity restaurantEntity;
 
   public Integer getId() {
