@@ -12,6 +12,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customer")
+@NamedQueries({
+        @NamedQuery(name = "customerByUuid", query = "select ce from CustomerEntity ce where ce.uuid =:uuid")
+})
 public class CustomerEntity implements Serializable {
 
   @Id
