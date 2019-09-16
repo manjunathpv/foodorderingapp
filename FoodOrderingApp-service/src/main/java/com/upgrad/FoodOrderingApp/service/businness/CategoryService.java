@@ -21,14 +21,26 @@ public class CategoryService {
     @Autowired
     private RestaurantDao restaurantDao;
 
-    /* Method to get the list of al Categories */
+    /**
+     * This method implements the business logic for 'category' endpoint
+     *
+     * @return List<CategoryEntity> object
+     */
     public List<CategoryEntity> getAllCategoriesOrderedByName() {
         return categoryDao.getAllCategories().stream()
                 .sorted(Comparator.comparing(CategoryEntity::getCategoryName))
                 .collect(Collectors.toList());
     }
 
-    /* Method to fetch category based on UUID else will throw Category not found exception */
+    /**
+     * This method implements the business logic for 'getCategoryById' endpoint
+     *
+     * @param categoryUuid UUID of category
+     *
+     * @return CategoryEntity object
+     *
+     * @throws CategoryNotFoundException If category is not found for given UUID
+     */
     public CategoryEntity getCategoryById(String categoryUuid) throws CategoryNotFoundException {
         if (categoryUuid.equals("")) {
             throw new CategoryNotFoundException("CNF-001", "Category id field should not be empty");
@@ -43,9 +55,15 @@ public class CategoryService {
         return categoryEntity;
     }
 
-    /* Method to get the list of categories of restaurant based on restaurants UUID */
+    /**
+     * Returns all categories for a given restaurant
+     *
+     * @param restaurantUUID UUID of restaurant entity
+     *
+     * @return List<CategoryEntity> object
+     */
     public List<CategoryEntity> getCategoriesByRestaurant(String restaurantUUID) {
-        RestaurantEntity restaurantEntity = restaurantDao.getRestaurantById(restaurantUUID);
+        RestaurantEntity restaurantEntity = restaurantDao.getRestaurantByUUID(restaurantUUID);
         return restaurantEntity.getCategories().stream()
                 .sorted(Comparator.comparing(CategoryEntity::getCategoryName))
                 .collect(Collectors.toList());
