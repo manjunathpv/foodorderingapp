@@ -2,6 +2,7 @@ package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
@@ -43,14 +44,14 @@ public class CustomerService {
         }
 
         // validation for password strength
-        if (!customerEntity.getPassoword().matches("^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#@$%&*!^-]).{8,}$")) {
+        if (!customerEntity.getPassword().matches("^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#@$%&*!^-]).{8,}$")) {
             throw new SignUpRestrictedException("SGR-004", "Weak password!");
         }
 
         // encrypt salt and password
-        String[] encryptedText = passwordCryptographyProvider.encrypt(customerEntity.getPassoword());
+        String[] encryptedText = passwordCryptographyProvider.encrypt(customerEntity.getPassword());
         customerEntity.setSalt(encryptedText[0]);
-        customerEntity.setPassoword(encryptedText[1]);
+        customerEntity.setPassword(encryptedText[1]);
 
         return customerDao.createCustomer(customerEntity);
     }
@@ -67,7 +68,7 @@ public class CustomerService {
 
         final String encryptedPassword = PasswordCryptographyProvider.encrypt(password, customerEntity.getSalt());
 
-        if (encryptedPassword.equals(customerEntity.getPassoword())) {
+        if (encryptedPassword.equals(customerEntity.getPassword())) {
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
             CustomerAuthEntity customerAuthEntity = new CustomerAuthEntity();
             customerAuthEntity.setUuid(UUID.randomUUID().toString());
@@ -146,15 +147,38 @@ public class CustomerService {
 
         // validation for old password
         final String oldEncryptedPassword = PasswordCryptographyProvider.encrypt(oldPassword, customerEntity.getSalt());
-        if (!oldEncryptedPassword.equals(customerEntity.getPassoword())) {
+        if (!oldEncryptedPassword.equals(customerEntity.getPassword())) {
             throw new UpdateCustomerException("UCR-004", "Incorrect old password!");
         }
 
         // encrypt salt and new password
         String[] encryptedText = passwordCryptographyProvider.encrypt(newPassword);
         customerEntity.setSalt(encryptedText[0]);
-        customerEntity.setPassoword(encryptedText[1]);
+        customerEntity.setPassword(encryptedText[1]);
 
         return customerDao.updateCustomerEntity(customerEntity);
+    }
+
+    /* Method to signout customer based on access-token else would return exception that user is not authorized without access=-token*/
+    @Transactional(propagation = Propagation.REQUIRED)
+    public CustomerEntity getCustomerAuth(String accessToken) throws AuthorizationFailedException {
+
+        CustomerAuthEntity customerAuthEntity = customerDao.getCustomerAuthByAccessToken(accessToken);
+
+        if (customerAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
+        }
+
+        if (customerAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
+        }
+
+        ZonedDateTime now = ZonedDateTime.now();
+        if (customerAuthEntity.getExpiresAt().isBefore(now)) {
+            throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
+        }
+
+
+        return customerAuthEntity.getCustomer();
     }
 }

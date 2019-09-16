@@ -2,6 +2,7 @@ package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.*;
 import com.upgrad.FoodOrderingApp.service.entity.*;
+import com.upgrad.FoodOrderingApp.service.exception.*;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,48 +39,46 @@ public class OrdersBusinessService {
   @Autowired
   private CustomerDao customerDao;
 
+  @Autowired
+  private CustomerService customerService;
+
   @Transactional(propagation = Propagation.REQUIRED)
   public OrdersEntity saveOrder(OrdersEntity ordersEntity, final String couponId, final String addressId,
-                                OrderItemEntity orderItemEntity, ItemEntity itemEntity, final String paymentId, final String restaurantId){
+                                OrderItemEntity orderItemEntity, ItemEntity itemEntity, final String paymentId, final String restaurantId, final String authorization) throws AuthorizationFailedException,
+          CouponNotFoundException, AddressNotFoundException, PaymentMethodNotFoundException, RestaurantNotFoundException, ItemNotFoundException {
 
-//    Need to remove the hardcoding
-//    =======START=======
-
-    CustomerEntity customerEntity = new CustomerEntity();
-    customerEntity.setUuid(UUID.randomUUID().toString());
-    customerEntity.setFirstname("Adarsh");
-    customerEntity.setLastname("Pandey");
-    customerEntity.setEmail("adarsh@upgrad.com");
-    customerEntity.setContactNumber("1111111113");
-    customerEntity.setPassword("95070049B59AFCD5A10135A810B10BBA9FC010028AA64C6574DDE85F6DC6009DE");
-    customerEntity.setSalt("asdfrtgyhdfrrfbfg5ef45r34f4ttt");
-
-    customerDao.saveCustomer(customerEntity);
-
-//    =======END=======
-
-
+    String accessToken = authorization.split("Bearer ")[1];
+    CustomerEntity customerEntity = customerService.getCustomerAuth(accessToken);
 
     ordersEntity.setCustomerEntity(customerEntity);
 
     CouponEntity couponEntity = couponDao.getCouponById(couponId);
+    if(couponEntity == null)
+      throw new CouponNotFoundException("CPF-002", "No coupon by this id");
     ordersEntity.setCouponEntity(couponEntity);
 
     AddressEntity addressEntity = addressDao.getAddressById(addressId);
+    if(addressEntity == null)
+      throw new AddressNotFoundException("ANF-003","No address by this id");
+
     ordersEntity.setAddressEntity(addressEntity);
 
     PaymentEntity paymentEntity = paymentDao.getPaymentById(paymentId);
+    if(paymentEntity == null)
+      throw new PaymentMethodNotFoundException("PNF-002","No payment method found by this id");
     ordersEntity.setPaymentEntity(paymentEntity);
 
     RestaurantEntity restaurantEntity = restaurantDao.getRestaurantById(restaurantId);
+    if(restaurantEntity == null)
+      throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
     ordersEntity.setRestaurantEntity(restaurantEntity);
 
     ItemEntity itemEntity1 = itemDao.getItemByUuid(itemEntity.getUuid());
-
+    if(itemEntity1 == null)
+      throw new ItemNotFoundException("INF-003", "No item by this id exist");
     orderItemEntity.setItemEntity(itemEntity1);
 
     orderItemEntity.setOrdersEntity(ordersEntity);
-
     ordersEntity.setOrderItemEntity(orderItemEntity);
 
 
@@ -92,11 +91,10 @@ public class OrdersBusinessService {
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
-  public List<OrdersEntity> getAllPastOrders(String authorization) {
+  public List<OrdersEntity> getAllPastOrders(String authorization) throws AuthorizationFailedException {
 
-//    Not Needed as such becuase we have UUID for Customer we can directly query Orders Table
-    CustomerEntity customerEntity = customerDao.getCustomerById("1c40d816-082b-4660-96a3-a3aa36fd97a0");
-
+    String accessToken = authorization.split("Bearer ")[1];
+    CustomerEntity customerEntity = customerService.getCustomerAuth(accessToken);
     List<OrdersEntity> ordersEntity = ordersDao.getOrdersByCustomerUuid(customerEntity);
 
     return ordersEntity;

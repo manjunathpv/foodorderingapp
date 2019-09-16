@@ -4,8 +4,7 @@ package com.upgrad.FoodOrderingApp.api.controller;
 import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.*;
 import com.upgrad.FoodOrderingApp.service.entity.*;
-import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
-import com.upgrad.FoodOrderingApp.service.exception.CouponNotFoundException;
+import com.upgrad.FoodOrderingApp.service.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,7 +48,8 @@ public class OrderController {
   }
 
   @RequestMapping(method = RequestMethod.POST, path = "/order", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public ResponseEntity<SaveOrderResponse> createAnswer (@RequestHeader("authorization") final String authorization, final SaveOrderRequest orderRequest) throws AuthorizationFailedException {
+  public ResponseEntity<SaveOrderResponse> saveOrder (@RequestHeader("authorization") final String authorization, final SaveOrderRequest orderRequest) throws AuthorizationFailedException,
+          CouponNotFoundException, RestaurantNotFoundException, AddressNotFoundException, PaymentMethodNotFoundException, ItemNotFoundException {
 
     OrdersEntity ordersEntity = new OrdersEntity();
 
@@ -73,7 +73,7 @@ public class OrderController {
             orderItemEntity,
             itemEntity,
             orderRequest.getPaymentId().toString(),
-            orderRequest.getRestaurantId().toString());
+            orderRequest.getRestaurantId().toString(), authorization);
 
     SaveOrderResponse saveOrderResponse = new SaveOrderResponse()
             .id(ordersEntity1.getUuid())
