@@ -1,15 +1,16 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
-import org.hibernate.criterion.Order;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/**
+ * OrderItemEntity class contains all the attributes to be mapped to all the fields in 'order_item' table in the database
+ */
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-        @NamedQuery(name = "orderItemByOrder", query = "select oie from OrderItemEntity oie where oie.ordersEntity =:order")
+        @NamedQuery(name = "itemsByOrder", query = "select q from OrderItemEntity q where q.orderEntity = :orderEntity"),
 })
 public class OrderItemEntity implements Serializable {
 
@@ -18,12 +19,14 @@ public class OrderItemEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name="ORDER_ID")
-  private OrdersEntity ordersEntity;
+  @NotNull
+  private OrderEntity orderEntity;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "ITEM_ID")
+  @NotNull
   private ItemEntity itemEntity;
 
   @Column(name = "QUANTITY")
@@ -42,12 +45,12 @@ public class OrderItemEntity implements Serializable {
     this.id = id;
   }
 
-  public OrdersEntity getOrdersEntity() {
-    return ordersEntity;
+  public OrderEntity getOrdersEntity() {
+    return orderEntity;
   }
 
-  public void setOrdersEntity(OrdersEntity ordersEntity) {
-    this.ordersEntity = ordersEntity;
+  public void setOrdersEntity(OrderEntity ordersEntity) {
+    this.orderEntity = ordersEntity;
   }
 
   public ItemEntity getItemEntity() {

@@ -487,3 +487,5 @@ INSERT INTO RESTAURANT_ITEM(item_id,restaurant_id) VALUES(99,8);
 INSERT INTO RESTAURANT_ITEM(item_id,restaurant_id) VALUES(100,5);
 INSERT INTO RESTAURANT_ITEM(item_id,restaurant_id) VALUES(101,6);
 INSERT INTO RESTAURANT_ITEM(item_id,restaurant_id) VALUES(102,7);
+
+INSERT INTO ORDERS(uuid,bill,coupon_id,discount,date,payment_id,customer_id,address_id,restaurant_id) VALUES ('2ddf6284-ecd0-11e8-8eb2-f2801f1b9sdjfhd2',200,3,50,DATE '2019-09-17',2,1,4,5);

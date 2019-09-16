@@ -1,53 +1,88 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
-@NamedQueries({
-        @NamedQuery(name = "restaurantByRestaurantId", query = "select re from RestaurantEntity re where re.uuid =:restaurantId")
+@NamedQueries(
+        {
+                @NamedQuery(name = "getAllRestaurantsByRating", query = "select q from RestaurantEntity q order by q.customerRating desc"),
+                @NamedQuery(name = "restaurantByUUID", query = "select q from RestaurantEntity q where q.uuid = :uuid"),
+        }
+)
 
-})
-public class RestaurantEntity implements Serializable {
+//This class contains all the attributes that are to be mapped to the respective fields in 'restaurant' table
+public class RestaurantEntity {
 
   @Id
-  @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(name = "UUID")
+  @Column(name = "uuid")
+  @NotNull
   @Size(max = 200)
   private String uuid;
 
-  @Column(name = "RESTAURANT_NAME")
+  @Column(name = "restaurant_name")
+  @NotNull
   @Size(max = 50)
   private String restaurantName;
 
-  @Column(name = "PHOTO_URL")
+  @Column(name = "photo_url")
+  @NotNull
   @Size(max = 255)
   private String photoUrl;
 
-  @Column(name = "CUSTOMER_RATING")
+  @Column(name = "customer_rating")
   @NotNull
   private BigDecimal customerRating;
 
-  @Column(name = "AVERAGE_PRICE_FOR_TWO")
+  @Column(name = "average_price_for_two")
   @NotNull
-  private Integer averagePriceForTwo;
+  private Integer avgPriceForTwo;
 
-  @Column(name = "NUMBER_OF_CUSTOMERS_RATED")
+  @Column(name = "number_of_customers_rated")
   @NotNull
-  private Integer numberOfCustomersRated;
+  private Integer customersRated;
 
-  @OneToOne
-  @JoinColumn(name="ADDRESS_ID")
-  private AddressEntity addressEntity;
+  @ManyToOne
+  @JoinColumn(name = "address_id")
+  @NotNull
+  private AddressEntity address;
+
+  @ManyToMany
+  @JoinTable(name = "restaurant_category", joinColumns = @JoinColumn(name = "restaurant_id"),
+          inverseJoinColumns = @JoinColumn(name = "category_id"))
+  private List<CategoryEntity> categories = new ArrayList<>();
+
+  @ManyToMany
+  @JoinTable(name = "restaurant_item", joinColumns = @JoinColumn(name = "restaurant_id"),
+          inverseJoinColumns = @JoinColumn(name = "item_id"))
+  private List<ItemEntity> items = new ArrayList<>();
+
+  public RestaurantEntity(){}
+
+  public List<ItemEntity> getItems() {
+    return items;
+  }
+
+  public void setItems(List<ItemEntity> items) {
+    this.items = items;
+  }
+
+  public List<CategoryEntity> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<CategoryEntity> categories) {
+    this.categories = categories;
+  }
 
   public Integer getId() {
     return id;
@@ -81,70 +116,36 @@ public class RestaurantEntity implements Serializable {
     this.photoUrl = photoUrl;
   }
 
-  public BigDecimal getCustomerRating() {
-    return customerRating;
+  public Double getCustomerRating() {
+    return customerRating.doubleValue();
   }
 
-  public void setCustomerRating(BigDecimal customerRating) {
-    this.customerRating = customerRating;
+  public void setCustomerRating(Double customerRating) {
+    this.customerRating = new BigDecimal(customerRating);
   }
 
-  public Integer getAveragePriceForTwo() {
-    return averagePriceForTwo;
+  public Integer getAvgPrice() {
+    return avgPriceForTwo;
   }
 
-  public void setAveragePriceForTwo(Integer averagePriceForTwo) {
-    this.averagePriceForTwo = averagePriceForTwo;
+  public void setAvgPrice(Integer avgPriceForTwo) {
+    this.avgPriceForTwo = avgPriceForTwo;
   }
 
-  public Integer getNumberOfCustomersRated() {
-    return numberOfCustomersRated;
+  public Integer getNumberCustomersRated() {
+    return customersRated;
   }
 
-  public void setNumberOfCustomersRated(Integer numberOfCustomersRated) {
-    this.numberOfCustomersRated = numberOfCustomersRated;
+  public void setNumberCustomersRated(Integer customersRated) {
+    this.customersRated = customersRated;
   }
 
-  public AddressEntity getAddressEntity() {
-    return addressEntity;
+  public AddressEntity getAddress() {
+    return address;
   }
 
-  public void setAddressEntity(AddressEntity addressEntity) {
-    this.addressEntity = addressEntity;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    RestaurantEntity that = (RestaurantEntity) o;
-    return Objects.equals(id, that.id) &&
-            Objects.equals(uuid, that.uuid) &&
-            Objects.equals(restaurantName, that.restaurantName) &&
-            Objects.equals(photoUrl, that.photoUrl) &&
-            Objects.equals(customerRating, that.customerRating) &&
-            Objects.equals(averagePriceForTwo, that.averagePriceForTwo) &&
-            Objects.equals(numberOfCustomersRated, that.numberOfCustomersRated) &&
-            Objects.equals(addressEntity, that.addressEntity);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, uuid, restaurantName, photoUrl, customerRating, averagePriceForTwo, numberOfCustomersRated, addressEntity);
-  }
-
-  @Override
-  public String toString() {
-    return "RestaurantEntity{" +
-            "id=" + id +
-            ", uuid=" + uuid +
-            ", restaurantName='" + restaurantName + '\'' +
-            ", photoUrl='" + photoUrl + '\'' +
-            ", customerRating=" + customerRating +
-            ", averagePriceForTwo=" + averagePriceForTwo +
-            ", numberOfCustomersRated=" + numberOfCustomersRated +
-            ", addressEntity=" + addressEntity +
-            '}';
+  public void setAddress(AddressEntity address) {
+    this.address = address;
   }
 
 }

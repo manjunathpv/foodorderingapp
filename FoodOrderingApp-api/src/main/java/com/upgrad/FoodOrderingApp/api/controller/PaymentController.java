@@ -2,7 +2,7 @@ package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.upgrad.FoodOrderingApp.api.model.PaymentListResponse;
 import com.upgrad.FoodOrderingApp.api.model.PaymentResponse;
-import com.upgrad.FoodOrderingApp.service.businness.PaymentBusinessService;
+import com.upgrad.FoodOrderingApp.service.businness.PaymentService;
 import com.upgrad.FoodOrderingApp.service.entity.PaymentEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ import java.util.UUID;
 public class PaymentController {
 
   @Autowired
-  private PaymentBusinessService paymentBusinessService;
+  private PaymentService paymentService;
 
   @RequestMapping(method = RequestMethod.GET, path = "/payment", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<PaymentListResponse> getAllAvailablePaymentMethods(@RequestHeader("authorization") final String authorization) throws AuthorizationFailedException{
 
-    List<PaymentEntity> paymentEntities = paymentBusinessService.getAllAvailablePaymentMethods();
+    List<PaymentEntity> paymentEntities = paymentService.getAllAvailablePaymentMethods();
     List<PaymentResponse> allPaymentResponses = new ArrayList<>();
 
     for (PaymentEntity payment: paymentEntities) {

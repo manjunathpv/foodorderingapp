@@ -8,14 +8,20 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-//CategoryDao class provides the database access to all the endpoints under category controller
+/**
+ * CategoryDao class provides the database access for all the endpoints in category controller
+ */
 @Repository
 public class CategoryDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    /* This method is to list all the categories available */
+    /**
+     * This method finds all categories
+     *
+     * @return List<CategoryEntity> object
+     */
     public List<CategoryEntity> getAllCategories() {
         try {
             return entityManager.createNamedQuery("allCategories", CategoryEntity.class).getResultList();
@@ -24,7 +30,13 @@ public class CategoryDao {
         }
     }
 
-    /* this method returns the category based on the category UUID */
+    /**
+     * This method returns category entity for a given uuid
+     *
+     * @param uuid UUID of category entity
+     *
+     * @return CategoryEntity object
+     */
     public CategoryEntity getCategoryByUuid(String uuid) {
         try {
             return entityManager.createNamedQuery("categoryByUuid", CategoryEntity.class).setParameter("uuid", uuid).getSingleResult();
